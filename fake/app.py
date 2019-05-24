@@ -4,14 +4,30 @@ from flask import jsonify, make_response, request
 from flask_cors import CORS
 
 from data import lists as init_lists
-from model import get_all_users, add_one
+from model import get_all_users, add_one, find_one
 
 
 app = Flask(__name__)
 CORS(app)
 
 
-def to_render(x):
+def to_render(data):
+    x = data or []
+    if isinstance(x, list):
+
+        [
+            i.update({"id": str(i.get("_id")),
+            "_id": str(i.get("_id"))
+            })
+            for i in x
+        ]
+    else:
+        x = data or {}
+        data.update({
+            "_id": str(data.get("_id")),
+            "id": str(data.get("_id"))
+        })
+
     r = make_response(jsonify(x))
 
     r.mimetype = 'application/json'
@@ -29,7 +45,10 @@ def api_lists(item):
     if request.method == "GET":
         print("Get LIST")
         if item:
-            return to_render(lists[int(item)])
+            print("Get Item from[{}]".format(item))
+            x = find_one(item)
+            print("xxxxxxxxxxxx", x)
+            return to_render(x)
         else:
             return to_render(get_all_users())
 
@@ -45,13 +64,20 @@ def api_lists(item):
         print("d--sss-xxxx-->", d)
         d.update({"id": str(_id)})
         print("d---xxxx-->", d)
-        return to_render(d)
+        data = {
+            "data": d
+        }
+        return to_render(data)
 
     elif request.method == "PUT":
-        if item:
-            return to_render(lists[int(item)])
-        else:
-            return to_render(lists)
+        x = find_one(item)
+        return to_render(x)
+
+        # if item:
+        #     return to_render(lists[int(item)])
+        # else:
+        #     return to_render(lists)
+
     elif request.method == "DELETE":
         lists = [
             x for x in lists if int(item) != x.get("id")
