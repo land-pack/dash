@@ -4,14 +4,16 @@ from flask import jsonify, make_response, request
 from flask_cors import CORS
 
 from data import lists as init_lists
-from model import get_all_users, add_one, find_one, remove_one
+from model import get_all_users, add_one, find_one, remove_one, total_items
 
 
 app = Flask(__name__)
 CORS(app)
 
 
-def to_render(data):
+def to_render(data, total=None):
+    # total = total if total else len(data)
+    total = total_items()
     x = data or []
     if isinstance(x, list):
 
@@ -31,7 +33,7 @@ def to_render(data):
     r = make_response(jsonify(x))
 
     r.mimetype = 'application/json'
-    r.headers['X-Total-Count'] = len(x)
+    r.headers['X-Total-Count'] = total
     r.headers['Access-Control-Expose-Headers'] = "X-Total-Count"
     return r
 
@@ -51,7 +53,7 @@ def api_lists(item):
             print("Get Item from[{}]".format(item))
             x = find_one(item)
             print("xxxxxxxxxxxx", x)
-            return to_render(x)
+            return to_render(x) # if it's a instance , you can set total at init
         else:
             return to_render(get_all_users(_end=_end, _start=_start))
 

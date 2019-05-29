@@ -2,6 +2,10 @@ from db import db
 # from pymongo.objectid import ObjectId
 from bson.objectid import ObjectId
 
+def total_items():
+    user = db.users
+    return user.count_documents({})
+
 def get_all_users(_end=5, _order="DESC", _sort="id", _start=0):
     """
     _end=10&_order=DESC&_sort=id&_start=0
