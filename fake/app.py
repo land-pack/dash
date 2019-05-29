@@ -4,7 +4,7 @@ from flask import jsonify, make_response, request
 from flask_cors import CORS
 
 from data import lists as init_lists
-from model import get_all_users, add_one, find_one
+from model import get_all_users, add_one, find_one, remove_one
 
 
 app = Flask(__name__)
@@ -41,7 +41,10 @@ def api_lists(item):
     #  X-Total-Count
     # return jsonify(lists)
     lists = init_lists
-    print("Mehtod -->", request.method)
+    print("Mehtod -->", request.method, request.args.get("_end"))
+    _end = int(request.args.get("_end"))
+    _start = int(request.args.get("_start"))
+
     if request.method == "GET":
         print("Get LIST")
         if item:
@@ -50,7 +53,7 @@ def api_lists(item):
             print("xxxxxxxxxxxx", x)
             return to_render(x)
         else:
-            return to_render(get_all_users())
+            return to_render(get_all_users(_end=_end, _start=_start))
 
     elif request.method == "POST":
         print("POST New")
@@ -79,10 +82,11 @@ def api_lists(item):
         #     return to_render(lists)
 
     elif request.method == "DELETE":
-        lists = [
-            x for x in lists if int(item) != x.get("id")
-        ]
-        return to_render(lists)
+        # lists = [
+        #     x for x in lists if int(item) != x.get("id")
+        # ]
+        remove_one(item)
+        return to_render(get_all_users())
     else:
         return to_render(lists)
 

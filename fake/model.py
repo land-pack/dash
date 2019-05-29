@@ -2,8 +2,13 @@ from db import db
 # from pymongo.objectid import ObjectId
 from bson.objectid import ObjectId
 
-def get_all_users():
-    lists = list(db.users.find({}))
+def get_all_users(_end=5, _order="DESC", _sort="id", _start=0):
+    """
+    _end=10&_order=DESC&_sort=id&_start=0
+    """
+    limit = _end - _start
+    result= db.users.find({}).skip(_start).limit(limit)
+    lists = list(result)
 
     return lists
 
@@ -19,6 +24,11 @@ def add_one(x):
 def find_one(_id):
     user = db.users
     x = user.find_one({"_id": ObjectId(_id)})
+    return x
+
+def remove_one(_id):
+    user = db.users
+    x = user.remove({"_id": ObjectId(_id)})
     return x
 
 if __name__ == '__main__':
