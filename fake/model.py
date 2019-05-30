@@ -1,6 +1,7 @@
 from db import db
 # from pymongo.objectid import ObjectId
 from bson.objectid import ObjectId
+import pymongo
 
 def total_items():
     user = db.users
@@ -10,8 +11,13 @@ def get_all_users(_end=5, _order="DESC", _sort="id", _start=0):
     """
     _end=10&_order=DESC&_sort=id&_start=0
     """
+    order_map = {
+        "DESC": pymongo.DESCENDING,
+        "ASC": pymongo.ASCENDING
+    }
+
     limit = _end - _start
-    result= db.users.find({}).skip(_start).limit(limit)
+    result= db.users.find({}).skip(_start).sort([(_sort, order_map.get(_order))]).limit(limit)
     lists = list(result)
 
     return lists

@@ -46,6 +46,8 @@ def api_lists(item):
     print("Mehtod -->", request.method, request.args.get("_end"))
     _end = int(request.args.get("_end"))
     _start = int(request.args.get("_start"))
+    _sort = request.args.get("_sort")
+    _order = request.args.get("_order")
 
     if request.method == "GET":
         print("Get LIST")
@@ -55,7 +57,7 @@ def api_lists(item):
             print("xxxxxxxxxxxx", x)
             return to_render(x) # if it's a instance , you can set total at init
         else:
-            return to_render(get_all_users(_end=_end, _start=_start))
+            return to_render(get_all_users(_end=_end, _start=_start, _sort=_sort, _order=_order))
 
     elif request.method == "POST":
         print("POST New")
