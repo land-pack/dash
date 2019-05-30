@@ -1,5 +1,6 @@
 from flask import Flask
-from flask import jsonify, make_response, request
+from flask import jsonify, make_response, request, redirect, url_for
+from flask import abort
 
 from flask_cors import CORS
 
@@ -44,14 +45,16 @@ def api_lists(item):
     # return jsonify(lists)
     lists = init_lists
     print("Mehtod -->", request.method, request.args.get("_end"))
-    _end = int(request.args.get("_end"))
-    _start = int(request.args.get("_start"))
+    _end = int(request.args.get("_end", 10))
+    _start = int(request.args.get("_start", 0))
     _sort = request.args.get("_sort")
     _order = request.args.get("_order")
 
     if request.method == "GET":
         print("Get LIST")
-        if item:
+        if item is None:
+            return to_render(get_all_users(_end=_end, _start=_start, _sort=_sort, _order=_order))
+        elif len(item) > 5: # is MongoID 
             print("Get Item from[{}]".format(item))
             x = find_one(item)
             print("xxxxxxxxxxxx", x)
@@ -63,18 +66,15 @@ def api_lists(item):
         print("POST New")
         # add_one()
         d = request.json
-        print("post data --->", request.data)
-        print("post data --->", request.json)
-
-        print("before ..d----->", d)
         _id = add_one(d)
-        print("d--sss-xxxx-->", d)
         d.update({"id": str(_id)})
-        print("d---xxxx-->", d)
         data = {
             "data": d
         }
-        return to_render(data)
+        return redirect("users/{}".format(_id))
+        # return to_render(data)
+        # return to_render(get_all_users(_end=_end, _start=_start, _sort=_sort, _order=_order))
+        # return _id
 
     elif request.method == "PUT":
         x = find_one(item)
@@ -101,5 +101,24 @@ def api_posts():
     r.headers['X-Total-Count'] = len(lists)
     r.headers['Access-Control-Expose-Headers'] = True
     return r
+
+@app.route("/auth/login", methods=["GET", "POST"])
+def auth_login():
+    # r = make_response(jsonify(lists))
+    # r.mimetype = 'application/json'
+    # r.headers['X-Total-Count'] = len(lists)
+    # r.headers['Access-Control-Expose-Headers'] = True
+    print(request.json)
+    # return jsonify({"token":"xxxx"})
+    data = request.json or {}
+
+    username = data.get("username")
+    print(username)
+    if username == 'username':
+        return jsonify({"token":"xxxx"})
+    else:
+        abort(403)
+    
+
 if __name__ == '__main__':
     app.run(debug=True, port=19001)
