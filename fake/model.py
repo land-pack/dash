@@ -3,43 +3,46 @@ from db import db
 from bson.objectid import ObjectId
 import pymongo
 
-def total_items():
-    user = db.users
-    return user.count_documents({})
+class Model(object):
+    def __init__(self, col_name="users"):
+        self.col = db[col_name]
 
-def get_all_users(_end=5, _order="DESC", _sort="id", _start=0):
-    """
-    _end=10&_order=DESC&_sort=id&_start=0
-    """
-    order_map = {
-        "DESC": pymongo.DESCENDING,
-        "ASC": pymongo.ASCENDING
-    }
+    def total_items(self):
+        return self.col.count_documents({})
 
-    limit = _end - _start
-    result= db.users.find({}).skip(_start).sort([(_sort, order_map.get(_order))]).limit(limit)
-    lists = list(result)
+    def get_all(self, _end=5, _order="DESC", _sort="id", _start=0):
+        """
+        _end=10&_order=DESC&_sort=id&_start=0
+        """
+      
+        order_map = {
+            "DESC": pymongo.DESCENDING,
+            "ASC": pymongo.ASCENDING
+        }
 
-    return lists
+        limit = _end - _start
 
-def add_one(x):
-    user = db.users
-    result = user.insert_one(x)
-    _id = result.inserted_id
-    print('One post: {0}'.format(_id))
+        result= self.col.find({}).skip(_start).sort([(_sort, order_map.get(_order))]).limit(limit)
+        lists = list(result)
 
-    del x["_id"]
-    return _id
+        return lists
 
-def find_one(_id):
-    user = db.users
-    x = user.find_one({"_id": ObjectId(_id)})
-    return x
+    def add_one(self, x):
+        result = self.col.insert_one(x)
+        _id = result.inserted_id
+        print('One post: {0}'.format(_id))
 
-def remove_one(_id):
-    user = db.users
-    x = user.remove({"_id": ObjectId(_id)})
-    return x
+        del x["_id"]
+        return _id
+
+    def find_one(self, _id):
+        x = self.col.find_one({"_id": ObjectId(_id)})
+        return x
+
+    def remove_one(self, _id):
+        x = self.col.remove({"_id": ObjectId(_id)})
+        return x
+
 
 if __name__ == '__main__':
     print(get_all_users())

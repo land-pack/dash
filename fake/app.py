@@ -5,7 +5,7 @@ from flask import abort
 from flask_cors import CORS
 
 from data import lists as init_lists
-from model import get_all_users, add_one, find_one, remove_one, total_items
+from model import Model
 
 
 app = Flask(__name__)
@@ -13,8 +13,8 @@ CORS(app)
 
 
 def to_render(data, total=None):
-    # total = total if total else len(data)
-    total = total_items()
+    total = total if total else len(data)
+    # total = total_items()
     x = data or []
     if isinstance(x, list):
 
@@ -49,24 +49,24 @@ def api_lists(item):
     _start = int(request.args.get("_start", 0))
     _sort = request.args.get("_sort")
     _order = request.args.get("_order")
-
+    model = Model('users')
     if request.method == "GET":
         print("Get LIST")
         if item is None:
-            return to_render(get_all_users(_end=_end, _start=_start, _sort=_sort, _order=_order))
+            return to_render(model.get_all(_end=_end, _start=_start, _sort=_sort, _order=_order), model.total_items())
         elif len(item) > 5: # is MongoID 
             print("Get Item from[{}]".format(item))
-            x = find_one(item)
+            x = model.find_one(item)
             print("xxxxxxxxxxxx", x)
             return to_render(x) # if it's a instance , you can set total at init
         else:
-            return to_render(get_all_users(_end=_end, _start=_start, _sort=_sort, _order=_order))
+            return to_render(model.get_all(_end=_end, _start=_start, _sort=_sort, _order=_order), model.total_items())
 
     elif request.method == "POST":
         print("POST New")
         # add_one()
         d = request.json
-        _id = add_one(d)
+        _id = model.add_one(d)
         d.update({"id": str(_id)})
         data = {
             "data": d
@@ -77,8 +77,8 @@ def api_lists(item):
         # return _id
 
     elif request.method == "PUT":
-        x = find_one(item)
-        return to_render(x)
+        x = model.find_one(item)
+        return to_render(x, model.total_items())
 
         # if item:
         #     return to_render(lists[int(item)])
@@ -89,8 +89,8 @@ def api_lists(item):
         # lists = [
         #     x for x in lists if int(item) != x.get("id")
         # ]
-        remove_one(item)
-        return to_render(get_all_users())
+        model.remove_one(item)
+        return to_render(model.get_all(), model.total_items())
     else:
         return to_render(lists)
 
@@ -118,7 +118,36 @@ def auth_login():
         return jsonify({"token":"xxxx"})
     else:
         abort(403)
-    
+
+@app.route("/course", methods=["OPTIONS", "GET", "POST", "PUT", "DELETE"], defaults={'item': None})
+@app.route("/course/<item>", methods=["OPTIONS", "GET", "POST", "PUT", "DELETE"])
+def courses(item):
+    #  X-Total-Count
+    # return jsonify(lists)
+    # lists = init_lists
+    print("Mehtod -->", request.method, request.args.get("_end"))
+    _end = int(request.args.get("_end", 10))
+    _start = int(request.args.get("_start", 0))
+    _sort = request.args.get("_sort")
+    _order = request.args.get("_order")
+
+    # if request.method == "GET":
+    #     print("Get LIST")
+    #     if item is None:
+    #         return to_render(get_all_users(_end=_end, _start=_start, _sort=_sort, _order=_order))
+    #     elif len(item) > 5: # is MongoID 
+    #         print("Get Item from[{}]".format(item))
+    #         x = find_one(item)
+    #         print("xxxxxxxxxxxx", x)
+    #         return to_render(x) # if it's a instance , you can set total at init
+    #     else:
+    model = Model('course')
+
+    if request.method == "POST":
+        print(request.json)
+        # return redirect("course")
+
+    return to_render(model.get_all(), model.total_items())
 
 if __name__ == '__main__':
     app.run(debug=True, port=19001)
