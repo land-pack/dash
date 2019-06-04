@@ -1,7 +1,9 @@
 import React from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import { Title } from "react-admin";
+import { Title, SelectField } from "react-admin";
+import { DialogContent } from "@material-ui/core/DialogContent";
+import { Dialog } from "@material-ui/core";
 
 export default () => (
   <Card>
