@@ -23,7 +23,7 @@ import {
 } from "react-admin";
 import RichTextInput from "ra-input-rich-text";
 import ShoppingList from "./common/field";
-import { connect } from "react-redux";
+import BlogInput from "./common/field";
 
 const required = (message = "Required") => value =>
   value ? undefined : message;
@@ -35,7 +35,7 @@ const PostTitle = ({ record }) => {
 export const CourseList = props => (
   <List {...props}>
     <Datagrid>
-      <ShoppingList source="id" defaultValue="xxxx" label="IDs" />
+      <BlogInput source="id" defaultValue="xxxx" label="IDs" rate="190" />
       <TextField source="title" />
       <EditButton />
     </Datagrid>
@@ -45,7 +45,13 @@ export const CourseList = props => (
 export const CourseCreate = props => (
   <Create {...props}>
     <SimpleForm>
-      <ShoppingList source="xxx" defaultValue="xxxx" name="xxxx" />
+      {/* <ShoppingList source="xxx" defaultValue="xxxx" name="xxxx" /> */}
+      <BlogInput
+        source="id"
+        defaultValue="Hello World"
+        label="IDs"
+        rate="190"
+      />
       <TextInput source="title" defaultValue="Hello World" />
       <TextInput source="trainer" defaultValue="Frank AK" />
       <TextInput source="course_fee" defaultValue="$ 279.0" />
@@ -69,7 +75,12 @@ export const CourseCreate = props => (
 export const CourseShow = props => (
   <Show {...props}>
     <SimpleShowLayout>
-      <ShoppingList source="xxx" defaultValue="xxxx" />
+      <BlogInput
+        source="id"
+        defaultValue="Hello World"
+        label="IDs"
+        rate="190"
+      />
       <TextField source="title" />
       <TextField source="trainer" />
       <TextField source="course_fee" />
@@ -91,6 +102,12 @@ export const CourseEdit = props => (
   // aside={<Aside />}
   <Edit title={<PostTitle />} {...props}>
     <SimpleForm>
+      <BlogInput
+        source="id"
+        defaultValue="Hello World"
+        label="IDs"
+        rate="190"
+      />
       <DisabledInput label="Id" source="id" />
       <TextInput source="course_fee" validate={required()} />
       <RichTextInput source="Objections" validate={required()} />

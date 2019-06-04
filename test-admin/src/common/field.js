@@ -6,11 +6,13 @@ const MyTextField = ({ source, record = {} }) => <span>{record[source]}</span>;
 
 class ShoppingList extends React.Component {
   render() {
-    const { rate } = this.props;
+    const { rate, record } = this.props;
+    console.log(this.props);
     return (
       <div className="shopping-list">
         <h1>Shopping List for {this.props.name}</h1>
         <ul>
+          <li> {record.id}</li>
           <li>Instagram</li>
           <li>WhatsApp</li>
           <li>{rate}</li>
@@ -20,12 +22,14 @@ class ShoppingList extends React.Component {
   }
 }
 
+const mapStateToProps = function(state) {
+  return {
+    rate: state.rate
+  };
+};
 export default connect(
   null,
-  {
-    name: "xxxx",
-    rate: 190
-  }
+  {}
 )(ShoppingList);
 
 // MyTextField.propTypes = {
