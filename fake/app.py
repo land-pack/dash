@@ -288,7 +288,7 @@ class CustomerListApi(Resource):
 
 class CustomersApi(Resource):
 
-    def get(self, id=None):
+    def get(self, id):
 
         print("self._id", id)
         model = Model('customers')
@@ -300,11 +300,46 @@ class CustomersApi(Resource):
         d = to_json(model.get_all(), model.total_items())
         return d[0]
 
-class CommandsApi(Resource):
+class ReviewsListApi(Resource):
     def get(self):
-        return [], 200, {"X-Total-Count": 0, "Access-Control-Expose-Headers":"X-Total-Count"}
+        model = Model('reviews')
+        d = to_json(model.get_all(), model.total_items())
+        return d, 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count"}
 
 class ReviewsApi(Resource):
+    def get(self, id):
+        model = Model('reviews')
+        d = to_json(model.get_all(), model.total_items())
+        return d[0], 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count"}
+
+
+class ProductsListApi(Resource):
+    def get(self):
+        model = Model('products')
+        d = to_json(model.get_all(), model.total_items())
+        return d, 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count"}
+
+class CategoriesApi(Resource):
+    def get(self, id):
+        model = Model('categories')
+        d = to_json(model.get_all(), model.total_items())
+        return d[0], 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count"}
+
+class CategoriesListApi(Resource):
+    def get(self):
+        model = Model('categories')
+        d = to_json(model.get_all(), model.total_items())
+        return d, 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count"}
+
+class ProductsApi(Resource):
+    def get(self, id):
+        model = Model('products')
+        d = to_json(model.get_all(), model.total_items())
+        return d[0], 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count"}
+
+
+
+class CommandsApi(Resource):
     def get(self):
         return [], 200, {"X-Total-Count": 0, "Access-Control-Expose-Headers":"X-Total-Count"}
 
@@ -313,7 +348,12 @@ api.add_resource(HelloWorld, '/hello')
 api.add_resource(CustomerListApi, '/customers')
 api.add_resource(CustomersApi, '/customers/<id>')
 api.add_resource(CommandsApi, '/commands')
-api.add_resource(ReviewsApi, '/reviews')
+api.add_resource(ReviewsListApi, '/reviews')
+api.add_resource(ReviewsApi, '/reviews/<id>')
+api.add_resource(ProductsListApi, '/products')
+api.add_resource(ProductsApi, '/products/<id>')
+api.add_resource(CategoriesListApi, '/categories')
+api.add_resource(CategoriesApi, '/categories/<id>')
 
 if __name__ == '__main__':
     app.run(debug=True, port=19001)

@@ -78,11 +78,11 @@ class App extends Component {
         i18nProvider={i18nProvider}
       >
         <Resource name="customers" {...visitors} />
-        {/* <Resource name="commands" {...orders} options={{ label: "Orders" }} />
-        <Resource name="invoices" {...invoices} />
+        <Resource name="commands" {...orders} options={{ label: "Orders" }} />
+        {/* <Resource name="invoices" {...invoices} /> */}
         <Resource name="products" {...products} />
         <Resource name="categories" {...categories} />
-        <Resource name="reviews" {...reviews} /> */}
+        <Resource name="reviews" {...reviews} />
       </Admin>
     );
   }
