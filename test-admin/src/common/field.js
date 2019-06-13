@@ -4,6 +4,10 @@ import { connect } from "react-redux";
 
 const MyTextField = ({ source, record = {} }) => <span>{record[source]}</span>;
 
+/*
+ Build my own Component 
+ Just wri
+*/
 class ShoppingList extends React.Component {
   render() {
     const { rate, record } = this.props;
@@ -13,7 +17,9 @@ class ShoppingList extends React.Component {
         <h1>Shopping List for {this.props.name}</h1>
         <ul>
           <li> {record.id}</li>
-          <li>Instagram</li>
+          <li>
+            <img src="https://ui-avatars.com/api/?background=0D8ABC&color=fff" />
+          </li>
           <li>WhatsApp</li>
           <li>{rate}</li>
         </ul>

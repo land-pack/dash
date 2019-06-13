@@ -22,9 +22,9 @@ import {
   //   Typography
 } from "react-admin";
 import RichTextInput from "ra-input-rich-text";
-import ShoppingList from "./common/field";
+// import ShoppingList from "./common/field";
 import BlogInput from "./common/field";
-
+import MyEditor from "./common/myedit";
 const required = (message = "Required") => value =>
   value ? undefined : message;
 
@@ -68,6 +68,10 @@ export const CourseCreate = props => (
         source="published_at"
         defaultValue={new Date()}
       />
+      <MyEditor
+        source="Objections"
+        defaultValue="mmmmmmmmm Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum. "
+      />
     </SimpleForm>
   </Create>
 );
@@ -106,7 +110,7 @@ export const CourseEdit = props => (
         source="id"
         defaultValue="Hello World"
         label="IDs"
-        rate="190"
+        rate="888"
       />
       <DisabledInput label="Id" source="id" />
       <TextInput source="course_fee" validate={required()} />
