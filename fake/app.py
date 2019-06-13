@@ -285,6 +285,16 @@ class CustomerListApi(Resource):
         d = to_json(model.get_all(), model.total_items())
         return d, 200, {"X-Total-Count": model.total_items(), "Access-Control-Expose-Headers":"X-Total-Count"}
 
+    def post(self):
+        model = Model('customers')
+        d = request.json
+        _id = model.add_one(d)
+        d.update({"id": str(_id)})
+        data = {
+            "data": d
+        }
+        self.get()
+
 
 class CustomersApi(Resource):
 
@@ -295,10 +305,14 @@ class CustomersApi(Resource):
         d = to_json(model.get_all(), model.total_items())
         return d[0], 200, {"X-Total-Count": model.total_items(), "Access-Control-Expose-Headers":"X-Total-Count"}
 
+
+
     def put(self):
         model = Model('customers')
         d = to_json(model.get_all(), model.total_items())
         return d[0]
+
+
 
 class ReviewsListApi(Resource):
     def get(self):
@@ -339,21 +353,55 @@ class ProductsApi(Resource):
 
 
 
-class CommandsApi(Resource):
+
+
+class InvoicesApi(Resource):
+    def get(self, id):
+        model = Model('invoices')
+        d = to_json(model.get_all(), model.total_items())
+        return d[0], 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count"}
+
+class InvoicesListApi(Resource):
     def get(self):
-        return [], 200, {"X-Total-Count": 0, "Access-Control-Expose-Headers":"X-Total-Count"}
+        model = Model('invoices')
+        d = to_json(model.get_all(), model.total_items())
+        return d, 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count"}
+
+class CommandsApi(Resource):
+    def get(self, id):
+        model = Model('commands')
+        # d = to_json(model.get_all(), model.total_items())
+        d = to_json(model.find_one(id))
+
+        return d, 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count", "Access-Control-Allow-Origin": "*"}
+
+class CommandsListApi(Resource):
+    def get(self):
+        model = Model('commands')
+        d = to_json(model.get_all(), model.total_items())
+        return d, 200, {"X-Total-Count": model.total_items() , "Access-Control-Expose-Headers":"X-Total-Count", "Access-Control-Allow-Origin": "*"}
+
+
+    def put(self):
+        model = Model('commands')
+        d = to_json(model.get_all(), model.total_items())
+        return d[0]
+
 
 
 api.add_resource(HelloWorld, '/hello')
 api.add_resource(CustomerListApi, '/customers')
 api.add_resource(CustomersApi, '/customers/<id>')
-api.add_resource(CommandsApi, '/commands')
 api.add_resource(ReviewsListApi, '/reviews')
 api.add_resource(ReviewsApi, '/reviews/<id>')
 api.add_resource(ProductsListApi, '/products')
 api.add_resource(ProductsApi, '/products/<id>')
 api.add_resource(CategoriesListApi, '/categories')
 api.add_resource(CategoriesApi, '/categories/<id>')
+api.add_resource(InvoicesListApi, '/invoices')
+api.add_resource(InvoicesApi, '/invoices/<id>')
+api.add_resource(CommandsListApi, '/commands')
+api.add_resource(CommandsApi, '/commands/<id>')
 
 if __name__ == '__main__':
     app.run(debug=True, port=19001)

@@ -71,7 +71,7 @@ class App extends Component {
         customSagas={sagas}
         customRoutes={customRoutes}
         authProvider={authProvider}
-        // dashboard={Dashboard}
+        dashboard={Dashboard}
         loginPage={Login}
         appLayout={Layout}
         locale="en"
@@ -79,7 +79,7 @@ class App extends Component {
       >
         <Resource name="customers" {...visitors} />
         <Resource name="commands" {...orders} options={{ label: "Orders" }} />
-        {/* <Resource name="invoices" {...invoices} /> */}
+        <Resource name="invoices" {...invoices} />
         <Resource name="products" {...products} />
         <Resource name="categories" {...categories} />
         <Resource name="reviews" {...reviews} />
