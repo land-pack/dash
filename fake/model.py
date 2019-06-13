@@ -39,6 +39,13 @@ class Model(object):
         x = self.col.find_one({"_id": ObjectId(_id)})
         return x
 
+    def update(self, _id, data):
+        if "_id" in data:
+            del data['_id']
+        self.col.update({'_id': ObjectId(_id)}, {"$set": data}, upsert = True)
+        x = self.col.find_one({"_id": ObjectId(_id)})
+        return x
+
     def remove_one(self, _id):
         x = self.col.remove({"_id": ObjectId(_id)})
         return x
