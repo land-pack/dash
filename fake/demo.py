@@ -43,12 +43,12 @@ class CustomerListApi(Resource):
     def post(self):
         model = Model('customers')
         d = request.json
+        d.update({
+            "avatar" : "https://s3.amazonaws.com/uifaces/faces/twitter/wim1k/128.jpg"
+        })
         _id = model.add_one(d)
         d.update({"id": str(_id)})
-        data = {
-            "data": d
-        }
-        self.get()
+        return d
 
 
 class CustomersApi(Resource):
@@ -64,6 +64,10 @@ class CustomersApi(Resource):
         data = request.json
         x = model.update(id, data)
         return to_json(x)
+
+    def delete(self, id):
+        model = Model('customers')
+        return model.remove_one(id)
 
 class ReviewsListApi(Resource):
     def get(self):

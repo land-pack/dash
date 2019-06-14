@@ -26,7 +26,9 @@ const i18nProvider = locale => {
   if (locale === "fr") {
     return import("./i18n/fr").then(messages => messages.default);
   }
-
+  if (locale === "zh") {
+    return import("./i18n/zh").then(messages => messages.default);
+  }
   // Always fallback on english
   return englishMessages;
 };

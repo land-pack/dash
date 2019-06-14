@@ -84,7 +84,7 @@ MyLayout.propTypes = {
   title: PropTypes.string.isRequired
 };
 
-const mapStateToProps = state => ({ isLoading: state.admin.loading > 0 });
+// const mapStateToProps = state => ({ isLoading: state.admin.loading > 0 });
 // export default connect(
 //   mapStateToProps,
 //   { setSidebarVisibility }
