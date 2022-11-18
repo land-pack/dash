@@ -12,7 +12,7 @@
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.5",
     "react-responsive": "^6.1.2",
-    "react-scripts": "3.0.1",
+    "react-scripts": "5.0.1",
     "react-validation": "^3.0.7"
   },
   "scripts": {
